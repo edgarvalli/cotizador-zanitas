@@ -1,0 +1,24 @@
+extends ../templates/layout
+block content
+	.row.mt-2
+		.title
+			h1 Lista de usuarios
+
+	.row.mt-5
+		table.table
+			tr
+				th Nombre
+				th Usuario
+				th Acción
+
+			each user in users
+				tr
+					td= user.name
+					td=user.username
+					td
+						button.btn.btn-danger(id="btn") Eliminar
+	script.
+		const btn = document.getElementById("btn");
+		btn.addEventListener("click", function(e) {
+			alert("Works")
+		})

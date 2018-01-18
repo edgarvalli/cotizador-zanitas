@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+html(lang="es")
+head
+	meta(charset="UTF-8")
+	title Cotización Zanitas
+style.
+	body {
+		position: relative;
+		padding: 1em;
+		margin: 0;
+		box-sizing: border-box;
+		text-align: center;
+		font-family:Sans-Serif;
+		font-size: 12px;
+	}
+	table {
+		width: 100%;
+		border-spacing: 0;
+		border: solid thin lightgrey;
+		border-bottom: none;
+		border-left: none;
+		text-align: left;
+	}
+	.client-info {
+		text-align: left;
+		padding: 1em;
+		margin-bottom: 2em;
+	}
+	th, td {
+		background: lightgrey;
+		padding: .5em;
+	}
+	td {
+		background: none;
+	}
+	tbody tr td:first-child {border-left: solid thin lightgrey;}
+	.strong {
+		font-weight: bold;
+	}
+	tfoot > tr >  td {border: solid thin lightgrey}
+	tfoot > tr >  td:first-child {border: none}
+	tfoot > tr:first-child >  td {
+		border-top: solid thin lightgrey;
+	}
+body
+	.header
+		.row
+			h1 Cotización
+		.row
+			div Zánitas Clínica + Hospital, S.A. de C.V.
+			div Rómulo Garza No. 110
+			div Hacienda los Morales, San Nicolas de los Garza, Nuevo León, México
+			div C.P. 66495
+			div Telefono: 8288 - 9200
+
+		.row
+			.client-info
+				.row
+					strong Atendió: 
+					span= user.name
+				br
+				.row
+					strong Paciente: 
+					span= quote.name
+
+			.else-info
+				.row
+
+	.container
+		.row
+			table(style="border-bottom: solid thin lightgrey")
+				thead
+					tr
+						th Cantidad
+						th Codigo
+						th UDM
+						th(colspan="4") Descripción
+				tbody
+					each item in items
+						tr
+							td= item.cant
+							td= item.code
+							td= item.udm
+							td(colspan="4")= item.name
+		.row
+			table(style="width: 250px; float: right; border: none")
+				tfoot
+					tr
+						td(class="strong" style="border: solid thin lightgrey;") Subtotal
+						td $ #{quote.subtotal.toLocaleString("es-MX", {minimumFractionDigits: 2})}
+					tr
+						td(class="strong" style="border: solid thin lightgrey;") Iva
+						td $ #{quote.tax.toLocaleString("es-MX", {minimumFractionDigits: 2})}
+					tr
+						td(class="strong" style="border: solid thin lightgrey;") Total
+						td $ #{quote.total.toLocaleString("es-MX", {minimumFractionDigits: 2})}
+

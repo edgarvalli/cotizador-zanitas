@@ -1,0 +1,18 @@
+extends ../templates/layout
+block content
+	.row
+		.col-12
+			h1 Nuevo Usuario
+
+		.col-md-12
+			form(action="/cotizador/users/add" method="post")
+				each input in inputs
+					.form-group
+						label(for=input.name)= input.display
+						input(class="form-control" type=input.type id=input.name name=input.name required=input.required)
+				select(class="form-control form-control-lg" name="profile")
+					option(value="") Selecciona un perfil
+					option(value="admin") Administrador
+					option(value="supervisor") Supervisor
+					option(value="user") Usuario
+				button(class="btn btn-success mt-5") CREAR

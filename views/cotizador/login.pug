@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+html(lang="es")
+head
+	meta(charset="UTF-8")
+	link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css")
+	link(rel="stylesheet", href="/css/styles.css")
+	title Cotizador Zanitas
+body.bg-light
+	.container
+		.row.d-flex.justify-content-center.center
+			.card.col-11.col-md-5.p-5
+				h3 Inicio de Sessión
+				h5 Administración de Usuarios
+				-if(error)
+					h5.text-danger Usuario o Contraseña incorrectos
+				form(action="/cotizador/users/auth", method="post")
+					.form-group
+						label(for="user") Usuario
+						input(type="text" class="form-control" id="user" name="username")
+					.form-group
+						label(for="pass") Contraseña
+						input(type="password" class="form-control" id="user" name="pass")
+					.form-group
+						button.btn.btn-primary login
