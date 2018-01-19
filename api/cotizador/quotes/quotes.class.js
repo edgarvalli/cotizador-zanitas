@@ -7,6 +7,10 @@ const db = "quotes";
 
 class Quote {
 
+    constructor() {
+        this.limit = 50
+    }
+
     fetch(req,res) {
 
         const querys = {
@@ -14,7 +18,8 @@ class Quote {
                 name: 1,
                 phone: 1,
                 total: 1,
-            }
+            },
+            limit: this.limit
         }
 
         mongo(db).find(querys, (err, docs) => err ? console.log(err) : res.send(docs))
@@ -49,6 +54,12 @@ class Quote {
                 res.json(data)
             }
         })
+    }
+
+    getMore(req, res) {
+
+
+
     }
 
     formatDate(date) {
