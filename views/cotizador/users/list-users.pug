@@ -9,7 +9,7 @@ block content
 			tr
 				th Nombre
 				th Usuario
-				th Acción
+				th(colspan="2") Acción
 
 			each user in users
 				tr
@@ -17,6 +17,8 @@ block content
 					td=user.username
 					td
 						button.btn.btn-danger(id="btn") Eliminar
+					td
+						button.btn.btn-success(id="cp") Cambiar contraseña
 	script.
 		const btn = document.getElementById("btn");
 		btn.addEventListener("click", function(e) {

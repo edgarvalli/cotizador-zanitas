@@ -61,6 +61,11 @@ class User {
 		})
 
 	}
+
+	remove(req,res) {
+	
+
+	}
 	
 	isAuth(req,res) {
     	const { username, pass } = req.body;
