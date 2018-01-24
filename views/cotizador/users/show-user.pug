@@ -1,0 +1,24 @@
+extends ../templates/layout
+block content
+	.row
+		.col-12
+			h1 Nuevo Usuario
+
+		.col-md-12
+			form(action="/cotizador/users/update" method="post")
+				each input in inputs
+					.form-group
+						label(for=input.name)= input.display
+						input(class="form-control" type=input.type id=input.name name=input.name required=input.required value=user[input.name])
+				.form-group
+					input(type="checkbox" name="active" class="form-check-input" id="check" checked=user.active)
+					label(for="check" class="form-check-label") Activo
+				select(class="form-control form-control-lg" name="profile")
+					option(value=user.profile)= user.display
+					option(value="admin") Administrador
+					option(value="supervisor") Supervisor
+					option(value="user") Usuario
+				input(type="hidden" name="id" value=user._id)
+				button(class="btn btn-success mt-5") ACTUALIZAR
+		script.
+			document.querySelector("#password").disabled = true

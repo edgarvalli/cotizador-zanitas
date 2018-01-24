@@ -1,5 +1,24 @@
 const mongo = require("../../../lib/mongo.client")("cotizador");
 const bcrypt = require("bcrypt");
+const inputs = [
+	{
+		name: "name",
+		display: "Nombre",
+		type: "text"
+	},
+	{
+		name: "username",
+		display: "Usuario",
+		type: "text",
+		required: "required"
+	},
+	{
+		name: "password",
+		display: "Contraseña",
+		type: "password",
+		required: "required"
+	}
+];
 
 class User {
 
@@ -12,28 +31,51 @@ class User {
 	}
 
     newUser(req,res) {
-		res.render("cotizador/users/new-user",{
-			inputs: [
-				{
-					name: "name",
-					display: "Nombre",
-					type: "text"
-				},
-				{
-					name: "username",
-					display: "Usuario",
-					type: "text",
-					required: "required"
-				},
-				{
-					name: "password",
-					display: "Contraseña",
-					type: "password",
-					required: "required"
+		res.render("cotizador/users/new-user",{ inputs })
+    }
+
+    showUser(req,res) {
+		const { id } = req.params;
+		const _id = mongo("users").id(id);
+		mongo("users").findOne({_id}, (err, user) => {
+
+			if(err) {
+				res.json({error: true, msg: err});
+			} else {
+				let display;
+				switch(user.profile) {
+					case "admin":
+						display = "Administrador";
+					break;
+
+					case "supervisor":
+						display = "Supervisor";
+					break;
+
+					case "user":
+						display = "Usuario";
+					break;
+
+					default:
+						display ="Usuario"
+					break;
 				}
-			]
+
+				user.display = display;
+
+				res.render("cotizador/users/show-user",{ user, inputs })
+			}
+
 		})
     }
+
+	updateUser(req, res) {
+		const { id, username, profile, name, active } = req.body;
+		const _id = mongo("users").id(id);
+		const set = { $set: { username, profile, name, active } };
+		mongo("users").update({_id}, set, err => err ? res.json({error: true, msg: err})
+						: res.redirect("/cotizador/users/list"))
+	}
 
     fetch(req, res) {
     	mongo("users").find({}, (err, users) => {
@@ -48,6 +90,7 @@ class User {
 			bcrypt.genSalt(10, (err, salt) => {
 				bcrypt.hash(data.password, salt, (err, hash) =>{
 					data.password = hash;
+					data.active = true;
 					mongo("users").insert(data, err => {
 						if(err) {
 							res.send("Ocurrio un error")
@@ -63,7 +106,33 @@ class User {
 	}
 
 	remove(req,res) {
+		
+		const { id } = req.params;
+		const _id = mongo("users").id(id);
+		mongo("users").remove({_id}, err => err ? res.json({error: true, msg: err})
+				: res.json({error: false, msg: "success"}))
 	
+	}
+
+	changePassword(req, res) {
+		const { id, password } = req.body;
+		
+		bcrypt.genSalt(10, (err, salt) => {
+			bcrypt.hash(password, salt, (err, hash) =>{
+				if(err) {
+					res.json({error: true, msg: err})
+				} else {
+					const data = {
+						$set: { password: hash }
+					}
+					mongo("users").update({_id: mongo("users").id(id)}, data, err => {
+						err ? res.json({error:true, msg: err})
+							: res.json({error: false, msg: "success"})
+					})
+				}
+	
+			})
+		})
 
 	}
 	

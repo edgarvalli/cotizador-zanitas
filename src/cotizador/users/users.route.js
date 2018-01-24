@@ -13,7 +13,11 @@ router
 	.get("/loginpage", user.login)
 	.post("/auth", user.isAuth)
     .get("/new",auth, user.newUser)
+    .get("/show/:id",auth, user.showUser)
     .get("/list",auth, user.fetch)
     .post("/add",auth, user.add)
+    .post("/update", auth, user.updateUser)
+    .get("/remove/:id", user.remove)
+    .post("/changepass", user.changePassword)
 
 module.exports = router;

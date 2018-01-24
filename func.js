@@ -3,7 +3,7 @@ const moment = require("moment");
 const secret = "z4n1t4$s3cur1typ4ssw0rd";
 
 module.exports = {
-    headers: function(req,res,next) {
+    headers(req,res,next) {
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Token");
         next();
@@ -15,18 +15,18 @@ module.exports = {
         saveUninitialized: false
     },
 
-    createToken: function(payload, exp = 1444) {
+    createToken(payload, exp = 1444) {
         payload.exp = moment().add(1, "day").unix();
         const token = jwt.encode(payload, secret)
         return token;
     },
 
-    decodeToken: function(token) {
+    decodeToken(token) {
         const decode = jwt.decode(token, secret);
         return decode;
     },
 
-    isAuth: function(req,res,next) {
+    isAuth(req,res,next) {
         try {
             if(!req.headers.token) return res.json({error: true, msg: "No proporciono el token"})
             const token = jwt.decode(req.headers.token, secret,true);

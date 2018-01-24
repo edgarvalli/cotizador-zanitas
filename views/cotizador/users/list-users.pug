@@ -1,5 +1,14 @@
 extends ../templates/layout
 block content
+	style.
+		.link {
+			color: #000;
+			text-align: left;
+		}
+		.link:hover {
+			color: #fff;
+		}
+
 	.row.mt-2
 		.title
 			h1 Lista de usuarios
@@ -13,14 +22,28 @@ block content
 
 			each user in users
 				tr
-					td= user.name
+					td(class="justify-content-start")
+						a(class="link" href=`/cotizador/users/show/${user._id}`)= user.name
 					td=user.username
 					td
-						button.btn.btn-danger(id="btn") Eliminar
+						button.btn.btn-danger(onclick="events.remove(this)" userid=`${user._id}`) Eliminar
 					td
-						button.btn.btn-success(id="cp") Cambiar contraseña
-	script.
-		const btn = document.getElementById("btn");
-		btn.addEventListener("click", function(e) {
-			alert("Works")
-		})
+						button.btn.btn-success(onclick="events.showForm(this)" userid=`${user._id}`) Cambiar contraseña
+	.modal#modal
+		.modal-dialog
+			.modal-content
+				.modal-header
+					h5.modal-title Cambio de contraseña del usuario: 
+						span#user
+					button.close
+						span &times;
+				.modal-body
+					.form-group
+						label(for="pass") Nueva contraseña
+						input.form-control#pass(type="password" onchange="events.change(this)" name="password")
+					.form-group
+						label(for="r_pass") Repetir Nueva contraseña
+						input.form-control#r_pass(type="password" onchange="events.change(this)" name="r_password")
+				.modal-footer
+					button.btn.btn-primary(onclick="events.changePass(this)") Cambiar Contraseña
+					button.btn.btn-secondary(onclick="events.closeModal(this)") Cerrar

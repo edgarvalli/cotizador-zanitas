@@ -54,8 +54,12 @@ class Auth {
 	isAuth(req,res) {
 		const { username, password } = req.body.cred;
     	mongo(db).findOne({username}, (err, user) => {
-			if(err) return console.log("Erro found " + err);
+			if(err) return res.json({error: true, msg: "Usuario no existe o esta mal escrito"});
     		if(user) {
+    			
+				//Verify if the user is active
+				if(!user.active) return res.json({error: true, msg: "Usuario no activo"});
+
     			bcrypt.compare(password,user.password, (err, auth) => {
     				if(auth) {
 
@@ -70,11 +74,11 @@ class Auth {
 
     				} else {
     					console.log("This is the error: " + err);
-    					res.send({error: true})
+    					res.send({error: true, msg: "Contraseña incorrecta"})
     				}
     			})
     		} else {
-    			res.json({error: true})
+    			res.json({error: true, msg: "Usuario no existe o esta mal escrito"})
     		}
     	})
 	}
